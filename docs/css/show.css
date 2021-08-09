@@ -1,0 +1,13 @@
+body{
+    background-color: antiquewhite;
+}
+.elem{
+    margin: 70px;
+}
+.center p,img{
+    text-align: center;
+}
+.img {
+    justify-content: center;
+    display: flex;
+}

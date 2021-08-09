@@ -2,10 +2,9 @@ var wrapper = document.getElementById("signature-pad");
 var clearButton = wrapper.querySelector("[data-action=clear]");
 var changeColorButton = wrapper.querySelector("[data-action=change-color]");
 var undoButton = wrapper.querySelector("[data-action=undo]");
-var savePNGButton = wrapper.querySelector("[data-action=save-png]");
-var saveJPGButton = wrapper.querySelector("[data-action=save-jpg]");
-var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
+var Submits = document.querySelector("[data-action=save-png]");
 var canvas = wrapper.querySelector("canvas");
+
 var signaturePad = new SignaturePad(canvas, {
   // It's Necessary to use an opaque color when saving image as JPEG;
   // this option can be omitted if only saving as PNG or SVG
@@ -38,25 +37,6 @@ function resizeCanvas() {
 // rather than window resize events.
 window.onresize = resizeCanvas;
 resizeCanvas();
-
-function download(dataURL, filename) {
-  if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1) {
-    window.open(dataURL);
-  } else {
-    var blob = dataURLToBlob(dataURL);
-    var url = window.URL.createObjectURL(blob);
-
-    var a = document.createElement("a");
-    a.style = "display: none";
-    a.href = url;
-    a.download = filename;
-
-    document.body.appendChild(a);
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-  }
-}
 
 // One could simply use Canvas#toBlob method instead, but it's just to show
 // that it can be done using result of SignaturePad#toDataURL.
@@ -97,29 +77,28 @@ changeColorButton.addEventListener("click", function (event) {
   signaturePad.penColor = color;
 });
 
-savePNGButton.addEventListener("click", function (event) {
+
+
+Submits.addEventListener("click", function (event) {
+  var names = document.getElementById('name').value;
+  var sername = document.getElementById('sername').value;
+  var genders = document.querySelector('input[name="GENDER"]:checked');
+  console.log(genders);
   if (signaturePad.isEmpty()) {
     alert("Please provide a signature first.");
   } else {
     var dataURL = signaturePad.toDataURL();
-    download(dataURL, "signature.png");
-  }
-});
-
-saveJPGButton.addEventListener("click", function (event) {
-  if (signaturePad.isEmpty()) {
-    alert("Please provide a signature first.");
-  } else {
-    var dataURL = signaturePad.toDataURL("image/jpeg");
-    download(dataURL, "signature.jpg");
-  }
-});
-
-saveSVGButton.addEventListener("click", function (event) {
-  if (signaturePad.isEmpty()) {
-    alert("Please provide a signature first.");
-  } else {
-    var dataURL = signaturePad.toDataURL('image/svg+xml');
-    download(dataURL, "signature.svg");
+    // POST img data to server by JSON
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/sig2/docs/js/insert.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        name: names,
+        sername: sername,
+        gender: genders.value,
+        signature: dataURL
+    }));
+    window.location.href = "http://localhost/sig2/docs/";
+    alert("Saved!!");
   }
 });
