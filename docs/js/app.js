@@ -92,11 +92,11 @@ Submits.addEventListener("click", function (event) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/sig2/docs/js/insert.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify({
+    xhr.send(JSON.stringify({  //? send JSON by POST method
         name: names,
         sername: sername,
         gender: genders.value,
-        signature: dataURL
+        signature: dataURL     //! sinature data image/base64
     }));
     window.location.href = "http://localhost/sig2/docs/";
     alert("Saved!!");
