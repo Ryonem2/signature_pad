@@ -10,13 +10,11 @@
 <body>
     <div class="center">
     <?php
-
         require('dbconnect.php');
 
         $sql ="SELECT * FROM hardtothinkingthename";
-        $len = "SELECT COUNT(id_sig) FROM hardtothinkingthename";
+        // $len = "SELECT COUNT(id_sig) FROM hardtothinkingthename";
         $result = mysqli_query($connect,$sql);
-
 
         $i = 1;
         while ($row = mysqli_fetch_row($result)) {

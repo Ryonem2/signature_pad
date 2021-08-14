@@ -78,7 +78,6 @@ changeColorButton.addEventListener("click", function (event) {
 });
 
 
-
 Submits.addEventListener("click", function (event) {
   var names = document.getElementById('name').value;
   var sername = document.getElementById('sername').value;
